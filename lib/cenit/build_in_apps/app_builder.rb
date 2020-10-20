@@ -3,7 +3,11 @@ module Cenit
     module AppBuilder
       extend self
 
-      attr_reader :controller_def, :app_id, :document_types_defs
+      attr_reader :controller_def, :app_id
+
+      def document_types_defs
+        @document_types_defs ||= {}
+      end
 
       def custom_layout(*args)
         if args.length > 0
@@ -35,10 +39,7 @@ module Cenit
       end
 
       def document_type(name, &block)
-        unless @document_types_defs
-          @document_types_defs = {}
-        end
-        @document_types_defs[name] = block
+        document_types_defs[name] = block
       end
 
       def controller(&block)
