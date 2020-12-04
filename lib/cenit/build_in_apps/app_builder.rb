@@ -24,14 +24,22 @@ module Cenit
         @custom_layout
       end
 
-      def setups
-        unless @setups
-          @setups = []
-          setup do
+      def installers
+        unless @installers
+          @installers = []
+          install do
             ::Setup::Namespace.find_or_create_by(name: to_s).update(slug: app_key)
           end
         end
-        @setups
+        @installers
+      end
+
+      def install(&block)
+        setups << block
+      end
+
+      def setups
+        @setups ||= []
       end
 
       def setup(&block)
