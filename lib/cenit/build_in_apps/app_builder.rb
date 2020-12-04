@@ -39,7 +39,22 @@ module Cenit
       end
 
       def setups
-        @setups ||= []
+        unless @setups
+          @setups = []
+          setup do
+            app = self.app
+            config = app.configuration
+            redirect_uris = config.redirect_uris || []
+            oauth_callback_uri = "#{Cenit.homepage}/oauth/callback"
+            unless redirect_uris.include?(oauth_callback_uri)
+              redirect_uris << oauth_callback_uri
+              config.redirect_uris = redirect_uris
+              app.save
+              puts "OAuth callback URI added: #{oauth_callback_uri}"
+            end
+          end
+        end
+        @setups
       end
 
       def setup(&block)
