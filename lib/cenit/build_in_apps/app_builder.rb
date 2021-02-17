@@ -94,13 +94,9 @@ module Cenit
       end
 
       def controller_prefix(*args)
-        if args.length > 0
-          @controller_prefix = args[0]
-        end
-        @controller_prefix = begin
-          tokens = to_s
-                     .split('::')
-                     .map(&:underscore)
+        @controller_prefix = args[0] if args.length > 0
+        @controller_prefix ||= begin
+          tokens = to_s.split('::').map(&:underscore)
           tokens.pop
           tokens << app_key
           tokens.join('/')
