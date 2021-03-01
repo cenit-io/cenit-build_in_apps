@@ -9,6 +9,10 @@ module Cenit
         @document_types_defs ||= {}
       end
 
+      def file_types_defs
+        @file_types_defs ||= {}
+      end
+
       def custom_layout(*args)
         if args.length > 0
           layout = args[0]
@@ -63,6 +67,10 @@ module Cenit
 
       def document_type(name, &block)
         document_types_defs[name] = block
+      end
+
+      def file_type(name, &block)
+        file_types_defs[name] = block
       end
 
       def controller(&block)
