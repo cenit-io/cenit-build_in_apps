@@ -77,6 +77,10 @@ module Cenit
         @controller_def = block
       end
 
+      def controller?
+        !!controller_def
+      end
+
       def short_name
         to_s.split('::').last
       end
