@@ -43,7 +43,7 @@ module Cenit
       end
 
       def install(&block)
-        setups << block
+        installers << block
       end
 
       def setups
