@@ -13,6 +13,10 @@ module Cenit
         @file_types_defs ||= {}
       end
 
+      def types_options
+        @types_options ||= {}
+      end
+
       def custom_layout(*args)
         if args.length > 0
           layout = args[0]
@@ -65,11 +69,15 @@ module Cenit
         setups << block
       end
 
-      def document_type(name, &block)
+      def document_type(name, options = nil, &block)
+        fail "#{name} already defined as a file" if file_types_defs.key?(name)
+        types_options[name] = options if options
         document_types_defs[name] = block
       end
 
-      def file_type(name, &block)
+      def file_type(name, options = nil, &block)
+        fail "#{name} already defined as a document" if document_types_defs.key?(name)
+        types_options[name] = options if options
         file_types_defs[name] = block
       end
 
