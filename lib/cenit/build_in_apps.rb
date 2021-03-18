@@ -39,8 +39,11 @@ module Cenit
 
     def build_controllers_from(parent)
       apps_modules.each do |app_module|
-        controller = Class.new(parent, &app_module.controller_def)
+        controller = Class.new(parent)
         controller.instance_variable_set(:@app_module, app_module)
+        app_module.controller_defs.each do |controller_def|
+          controller.class_eval(&controller_def)
+        end
         key = app_module.app_key
         app_module.const_set('MainController', controller)
         if app_module.custom_layout

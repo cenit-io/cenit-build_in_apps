@@ -3,7 +3,11 @@ module Cenit
     module AppBuilder
       extend self
 
-      attr_reader :controller_def, :app_id
+      attr_reader :app_id
+
+      def controller_defs
+        @controller_defs ||= []
+      end
 
       def document_types_defs
         @document_types_defs ||= {}
@@ -82,11 +86,11 @@ module Cenit
       end
 
       def controller(&block)
-        @controller_def = block
+        controller_defs << block
       end
 
       def controller?
-        !!controller_def
+        controller_defs.any?
       end
 
       def short_name
