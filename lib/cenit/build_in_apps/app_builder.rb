@@ -50,6 +50,12 @@ module Cenit
         installers << block
       end
 
+      def default_redirect_uris
+        @default_redirect_uris ||= [
+          -> { "#{Cenit.homepage}/oauth/callback" }
+        ]
+      end
+
       def setups
         unless @setups
           @setups = []
@@ -57,13 +63,16 @@ module Cenit
             app = self.app
             config = app.configuration
             redirect_uris = config.redirect_uris || []
-            oauth_callback_uri = "#{Cenit.homepage}/oauth/callback"
-            unless redirect_uris.include?(oauth_callback_uri)
-              redirect_uris << oauth_callback_uri
-              config.redirect_uris = redirect_uris
-              app.save
-              puts "OAuth callback URI added: #{oauth_callback_uri}"
+            default_redirect_uris.each do |uri|
+              next unless uri
+              uri = uri.call unless uri.is_a?(String)
+              next if redirect_uris.include?(uri)
+              redirect_uris << uri
+              puts "OAuth callback URI added: #{uri}"
             end
+            config.redirect_uris = redirect_uris
+            app.save
+            puts("#{self}:redirect_uris", JSON.pretty_generate(app.configuration.redirect_uris))
           end
         end
         @setups
