@@ -36,6 +36,17 @@ module Cenit
         @custom_layout
       end
 
+      def initializers
+        unless @initializers
+          @initializers = []
+        end
+        @initializers
+      end
+
+      def on_initialize(&block)
+        initializers << block
+      end
+
       def installers
         unless @installers
           @installers = []
