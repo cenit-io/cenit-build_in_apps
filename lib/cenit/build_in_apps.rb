@@ -1,6 +1,7 @@
 require 'cenit/build_in_apps/version'
 require 'cenit/build_in_apps/error'
 require 'cenit/build_in_apps/app_builder'
+require 'cenit/build_in_apps/oauth_helpers'
 
 module Cenit
   module BuildInApps
